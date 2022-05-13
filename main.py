@@ -1,3 +1,4 @@
+import tkinter
 from curses import panel
 from tkinter import *
 from tkinter.font import BOLD
@@ -12,7 +13,13 @@ aplicacion = Tk()
 aplicacion.title("Mi Restaurante")
 
 # Centrar la ventana
-aplicacion.geometry("1020x630+200+120")
+window_height = 630
+window_width = 1100
+screen_width = aplicacion.winfo_screenwidth()
+screen_height = aplicacion.winfo_screenheight()
+x_cordinate = int((screen_width/2) - (window_width/2))
+y_cordinate = int((screen_height/2) - (window_height/2))
+aplicacion.geometry("{}x{}+{}+{}".format(window_width, window_height, x_cordinate, y_cordinate))
 
 # Evitar maximizar
 aplicacion.resizable(0, 0)
@@ -41,10 +48,10 @@ etiqueta_titulo = Label(
 etiqueta_titulo.grid(row=0, column=0)
 
 # ############ Panel Izquierdo ############
-panel_izquierdo = Frame(aplicacion, bd=2, relief=FLAT, bg="#353535", padx=16)
+panel_izquierdo = Frame(aplicacion, bd=2, relief=FLAT, bg="#353535", padx=0)
 panel_izquierdo.pack(side=LEFT)
 
-panel_costos = Frame(panel_izquierdo, bd=2, relief=FLAT, bg="#232323", padx=16, pady=10)
+panel_costos = Frame(panel_izquierdo, bd=2, relief=FLAT, bg="#232323", padx=5, pady=10)
 panel_costos.pack(side=BOTTOM)
 
 panel_comidas = LabelFrame(panel_izquierdo, text="Comidas", font=("Dosis", 19, BOLD), 
@@ -64,13 +71,13 @@ panel_derecha = Frame(aplicacion, bd=2, relief=FLAT, bg="#353535")
 panel_derecha.pack(side=RIGHT)
 
 panel_calculadora = Frame(panel_derecha, bd=2, relief=FLAT, bg="#353535")
-panel_calculadora.pack(side=BOTTOM)
+panel_calculadora.pack()
 
 panel_recibo = Frame(panel_derecha, bd=2, relief=FLAT, bg="#353535")
-panel_recibo.pack(side=BOTTOM)
+panel_recibo.pack()
 
 panel_botones = Frame(panel_derecha, bd=2, relief=FLAT, bg="#353535")
-panel_botones.pack(side=BOTTOM)
+panel_botones.pack()
 
 
 # ########################################################################
@@ -316,7 +323,79 @@ texto_total = Entry(panel_costos,
 
 texto_total.grid(row=2, column=3, padx=41)
 
+# ########################################################################
+# ############################ Panel Derecha #############################
+# ########################################################################
 
+# Botones
+
+botones = ['total', 'recibo', 'guardar', 'resetear']
+botones_creados = []
+columnas = 0
+
+for boton in botones:
+    boton = Button(panel_botones,
+                   text=boton.title(),
+                   font=("Dosis", 15, 'bold'),
+                   fg='#232323',
+                   bg='#232323',
+                   bd=1,
+                   width=6,
+                   height=2)
+    
+    botones_creados.append(boton)
+    
+    boton.grid(row=0, column=columnas, padx=2, pady=2)
+    columnas += 1
+    
+# Recibo
+texto_recibo = Text(panel_recibo,
+                    font = ("Dosis", 15, 'bold'),
+                    bd=1,
+                    width=37,
+                    height=10)
+
+texto_recibo.grid(row=0, column=0)
+
+
+# calculadora
+
+visor_calculadora = Entry(panel_calculadora,
+                          font=('Dosis', 22, 'bold'),
+                          width=27,
+                          bd=1)
+visor_calculadora.grid(row=0,
+                       column=0,
+                       columnspan=4)
+
+botones_calculadora = ['7', '8', '9', '+', '4', '5', '6', '-',
+                       '1', '2', '3', 'x', 'R', 'B', '0', '/']
+botones_guardados = []
+
+fila = 1
+columna = 0
+for boton in botones_calculadora:
+    boton = Button(panel_calculadora,
+                   text=boton.title(),
+                   font=('Dosis', 16, 'bold'),
+                   fg='#232323',
+                   bg='#232323',
+                   bd=1,
+                   width=5,
+                   height=2)
+
+    botones_guardados.append(boton)
+
+    boton.grid(row=fila,
+               column=columna)
+
+    if columna == 3:
+        fila += 1
+
+    columna += 1
+
+    if columna == 4:
+        columna = 0
 
 # Evita que la ventana se cierre
 aplicacion.mainloop()
